@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Paint Drawer</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #1a1f36;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .toolbar {
+            background-color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tool-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4f566b;
+        }
+
+        input[type="color"] {
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: none;
+        }
+
+        input[type="range"] {
+            cursor: pointer;
+            accent-color: #635bff;
+            width: 100px;
+        }
+
+        button {
+            background-color: #ffffff;
+            color: #4f566b;
+            border: 1px solid #e3e8ee;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        button:hover {
+            border-color: #a3acb9;
+            color: #1a1f36;
+        }
+
+        button.active {
+            background-color: #635bff;
+            color: #ffffff;
+            border-color: #635bff;
+        }
+
+        button#clearBtn {
+            background-color: #f2f4f7;
+            border-color: transparent;
+        }
+
+        button#clearBtn:hover {
+            background-color: #e6e9ee;
+            color: #cd3d64;
+        }
+
+        .canvas-container {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid #e3e8ee;
+        }
+
+        canvas {
+            display: block;
+            cursor: crosshair;
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Online Paint Drawer</h1>
+
+    <div class="toolbar">
+        <div class="tool-group">
+            <label for="colorPicker">Color</label>
+            <input type="color" id="colorPicker" value="#635bff">
+        </div>
+
+        <div class="tool-group">
+            <label for="brushSize">Brush Size</label>
+            <input type="range" id="brushSize" min="1" max="40" value="8">
+            <span id="sizeDisplay" style="font-size: 12px; color: #64748b; min-width: 20px;">8px</span>
+        </div>
+
+        <div class="tool-group">
+            <button id="drawBtn" class="active">🎨 Draw</button>
+            <button id="eraseBtn">🧽 Eraser</button>
+        </div>
+
+        <div class="tool-group">
+            <button id="clearBtn">🗑️ Clear Canvas</button>
+        </div>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="paintCanvas" width="800" height="500"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        const colorPicker = document.getElementById('colorPicker');
+        const brushSize = document.getElementById('brushSize');
+        const sizeDisplay = document.getElementById('sizeDisplay');
+        const drawBtn = document.getElementById('drawBtn');
+        const eraseBtn = document.getElementById('eraseBtn');
+        const clearBtn = document.getElementById('clearBtn');
+
+        let isDrawing = false;
+        let currentMode = 'draw'; 
+        let lastX = 0;
+        let lastY = 0;
+
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const pos = getMousePos(e);
+            [lastX, lastY] = [pos.x, pos.y];
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            if (e.touches) e.preventDefault(); 
+
+            const pos = getMousePos(e);
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(pos.x, pos.y);
+
+            if (currentMode === 'erase') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.lineWidth = brushSize.value;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+                ctx.strokeStyle = colorPicker.value;
+                ctx.lineWidth = brushSize.value;
+            }
+
+            ctx.stroke();
+            [lastX, lastY] = [pos.x, pos.y];
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+        }
+
+        brushSize.addEventListener('input', () => {
+            sizeDisplay.textContent = `${brushSize.value}px`;
+        });
+
+        drawBtn.addEventListener('click', () => {
+            currentMode = 'draw';
+            drawBtn.classList.add('active');
+            eraseBtn.classList.remove('active');
+        });
+
+        eraseBtn.addEventListener('click', () => {
+            currentMode = 'erase';
+            eraseBtn.classList.add('active');
+            drawBtn.classList.remove('active');
+        });
+
+        clearBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear your entire drawing?')) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+        });
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('touchstart', (e) => { startDrawing(e.touches[0]); });
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+    </script>
+</body>
+</html>
