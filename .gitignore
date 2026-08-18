@@ -1,0 +1,20 @@
+# Operating System files (hidden system junk)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Code Editor settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Future proofing (in case you add packages later)
+node_modules/
+.env
+dist/
+build/
+                   
