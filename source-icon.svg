@@ -1,11 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-  <path d="M25,85 C22,88 15,85 15,80 C15,70 45,35 50,40 Z" fill="#D2B48C" stroke="#5C4033" stroke-width="2" stroke-linejoin="round"/>
-  <path d="M20,75 C22,72 28,78 25,81" fill="none" stroke="#5C4033" stroke-width="1.5"/>
-  <path d="M48,38 L62,52 L55,59 L41,45 Z" fill="#C0C0C0" stroke="#4A4A4A" stroke-width="2" stroke-linejoin="round"/>
-  <line x1="45" y1="42" x2="59" y2="56" stroke="#808080" stroke-width="1"/>
-  <line x1="43" y1="44" x2="57" y2="58" stroke="#4A4A4A" stroke-width="1"/>
-  <path d="M55,59 C65,69 75,70 82,62 C88,55 85,45 75,35 C68,28 62,52 55,59" fill="#8B5A2B" stroke="#3A2212" stroke-width="2" stroke-linejoin="round"/>
-  <path d="M60,56 C65,52 72,44 76,40" fill="none" stroke="#5C4033" stroke-width="1"/>
-  <path d="M64,60 C70,58 76,52 80,47" fill="none" stroke="#5C4033" stroke-width="1"/>
-  <path d="M72,43 C76,39 80,45 82,49 C85,54 81,59 76,55 Z" fill="#0074D9"/>
+  <!-- Wood Handle -->
+  <path d="M 22,78 C 18,82 12,76 16,72 L 42,46 L 52,56 Z" fill="#D2B48C" stroke="#5C4033" stroke-width="2.5" stroke-linejoin="miter"/>
+  
+  <!-- Silver Metal Ferrule (Connects exactly to handle at 42,46 and 52,56) -->
+  <path d="M 42,46 L 56,32 L 66,42 L 52,56 Z" fill="#C0C0C0" stroke="#4A4A4A" stroke-width="2.5" stroke-linejoin="miter"/>
+  <line x1="47" y1="41" x2="57" y2="51" stroke="#808080" stroke-width="1.5"/>
+  <line x1="51" y1="37" x2="61" y2="47" stroke="#4A4A4A" stroke-width="1.5"/>
+
+  <!-- Dark Bristles (Connects exactly to metal at 56,32 and 66,42) -->
+  <path d="M 56,32 C 62,20 72,16 84,24 C 88,28 82,38 66,42 Z" fill="#8B5A2B" stroke="#3A2212" stroke-width="2.5" stroke-linejoin="miter"/>
+  
+  <!-- Bristle Detail Lines -->
+  <path d="M 60,34 C 66,28 72,25 78,26" fill="none" stroke="#5C4033" stroke-width="1"/>
+  <path d="M 63,39 C 69,34 74,31 80,30" fill="none" stroke="#5C4033" stroke-width="1"/>
+
+  <!-- Blue Paint Tip -->
+  <path d="M 72,22 C 78,18 84,24 82,28 C 76,33 70,27 72,22 Z" fill="#0074D9"/>
 </svg>
